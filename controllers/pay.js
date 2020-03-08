@@ -2,20 +2,21 @@ const router = require("express").Router();
 const stripe = require("stripe")(process.env.STRIPE_SK);
 
 router.post("/", (req, res) => {
+  console.log(req.body);
   stripe.charges
     .create({
-      amount: 9.99,
+      amount: 1000,
       currency: "usd",
       description: "Tortuga Spotify Exercise",
-      source: req.body
+      source: req.body.token.id
     })
     .then(data => {
       console.log(data);
-      res.status(406).send({ error: { content: "Error" } });
+      res.status(200).send(data);
     })
     .catch(err => {
       console.log(err);
-      res.send(err);
+      res.status(406).send(err);
     });
 });
 
